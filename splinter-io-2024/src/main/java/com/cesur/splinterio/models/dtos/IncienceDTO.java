@@ -9,7 +9,6 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class IncienceDTO {
-    private Long id;
     private String description;
     private Priorities priority;
     private Scopes scope;

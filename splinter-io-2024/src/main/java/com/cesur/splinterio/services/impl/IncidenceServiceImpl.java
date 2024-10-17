@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.cesur.splinterio.models.Incidence;
 import com.cesur.splinterio.models.dtos.IncienceDTO;
 import com.cesur.splinterio.repositories.IncidenceRepository;
+import com.cesur.splinterio.repositories.UserRepository;
 import com.cesur.splinterio.services.IncidenceService;
 
 @Service
@@ -17,14 +18,12 @@ public class IncidenceServiceImpl implements IncidenceService {
     @Autowired
     IncidenceRepository incidenceRepository;
 
-    @Override
-    public IncienceDTO getIncidencesById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getIncidencesById'");
-    }
+    @Autowired
+    UserRepository userRepository;
+  
 
     @Override
-    public List<IncienceDTO> getIncidencesByUserName(String username) {
+    public List getIncidencesByUserName(String username) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getIncidencesByUserName'");
     }
@@ -33,7 +32,7 @@ public class IncidenceServiceImpl implements IncidenceService {
     public void storeIncidence(IncienceDTO datos) {
         Incidence incidence = new Incidence();
         incidence.setDescription(datos.getDescription());
-        //incidence.setPriority(datos.getPriority());
+        incidence.setPriority(datos.getPriority());
         incidence.setCreatedAt(LocalDateTime.now());
         incidence.setPriority(datos.getPriority());
         incidence.setScope(datos.getScope());
@@ -46,6 +45,11 @@ public class IncidenceServiceImpl implements IncidenceService {
     public void deleteIncidence(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteIncidence'");
+    }
+
+    @Override
+    public List<Incidence> getAllIncidences() {
+       return incidenceRepository.findAll();
     }
 
 }

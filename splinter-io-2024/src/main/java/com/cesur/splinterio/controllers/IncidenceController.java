@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cesur.splinterio.models.dtos.IncienceDTO;
 import com.cesur.splinterio.services.IncidenceService;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,20 +15,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api") //Todas las llamadas deben tener /api al principio
 public class IncidenceController {
 
     @Autowired
     IncidenceService incidenceService;
 
-    @PostMapping("/incidence")
-    public ResponseEntity<Integer> postMethodName(@RequestBody IncienceDTO entity) {
-        //TODO: process POST request
+    @PostMapping("/incidence") 
+    public ResponseEntity<Void> postMethodName(@RequestBody IncienceDTO entity) {
+        
         try {
             incidenceService.storeIncidence(entity);
-            return new ResponseEntity<Integer>(1, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<Integer>(0, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     
