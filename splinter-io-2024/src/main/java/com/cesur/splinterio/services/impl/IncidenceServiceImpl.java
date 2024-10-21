@@ -5,12 +5,16 @@ import java.time.*;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Optionals;
 
 import com.cesur.splinterio.models.Incidence;
+import com.cesur.splinterio.models.User;
 import com.cesur.splinterio.models.dtos.IncienceDTO;
 import com.cesur.splinterio.repositories.IncidenceRepository;
 import com.cesur.splinterio.repositories.UserRepository;
 import com.cesur.splinterio.services.IncidenceService;
+
+import java.util.Optional; // Import the Optional class
 
 @Service
 public class IncidenceServiceImpl implements IncidenceService {
@@ -20,7 +24,6 @@ public class IncidenceServiceImpl implements IncidenceService {
 
     @Autowired
     UserRepository userRepository;
-  
 
     @Override
     public List getIncidencesByUserName(String username) {
@@ -30,15 +33,20 @@ public class IncidenceServiceImpl implements IncidenceService {
 
     @Override
     public void storeIncidence(IncienceDTO datos) {
-        Incidence incidence = new Incidence();
-        incidence.setDescription(datos.getDescription());
-        incidence.setPriority(datos.getPriority());
-        incidence.setCreatedAt(LocalDateTime.now());
-        incidence.setPriority(datos.getPriority());
-        incidence.setScope(datos.getScope());
-        incidence.setUserCreated(null);
-        
-        incidenceRepository.save(incidence);
+
+        Optional<User> user = userRepository.findById(Long.parseLong(datos.getUserCreated()));
+        if (user.isPresent()) {
+            Incidence incidence = new Incidence();
+            incidence.setDescription(datos.getDescription());
+            incidence.setPriority(datos.getPriority());
+            incidence.setCreatedAt(LocalDateTime.now());
+            incidence.setPriority(datos.getPriority());
+            incidence.setScope(datos.getScope());
+            incidence.setUserCreated(user.get());
+
+            incidenceRepository.save(incidence);
+        }
+
     }
 
     @Override
@@ -49,7 +57,7 @@ public class IncidenceServiceImpl implements IncidenceService {
 
     @Override
     public List<Incidence> getAllIncidences() {
-       return incidenceRepository.findAll();
+        return incidenceRepository.findAll();
     }
 
 }
